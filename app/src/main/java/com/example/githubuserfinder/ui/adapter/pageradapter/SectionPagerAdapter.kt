@@ -1,4 +1,4 @@
-package com.example.githubuserfinder.ui.detail.pageradapter
+package com.example.githubuserfinder.ui.adapter.pageradapter
 
 import android.content.Context
 import android.os.Bundle
@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.githubuserfinder.R
-import com.example.githubuserfinder.ui.detail.FollowersFragment
-import com.example.githubuserfinder.ui.detail.FollowingFragment
+import com.example.githubuserfinder.ui.fragment.FollowersFragment
+import com.example.githubuserfinder.ui.fragment.FollowingFragment
 
 class SectionPagerAdapter(private val mContext: Context, fm: FragmentManager): FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
@@ -24,13 +24,15 @@ class SectionPagerAdapter(private val mContext: Context, fm: FragmentManager): F
 
             when(position){
                 0 -> {
-                    fragment = FollowingFragment()
+                    fragment =
+                        FollowingFragment()
                     val bundle = Bundle()
                     bundle.putString("username", getData())
                     fragment.arguments = bundle
                 }
                 1 -> {
-                    fragment = FollowersFragment()
+                    fragment =
+                        FollowersFragment()
                     val bundle = Bundle()
                     bundle.putString("username", getData())
                     fragment.arguments = bundle

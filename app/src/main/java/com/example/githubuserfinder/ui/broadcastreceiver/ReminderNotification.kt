@@ -1,4 +1,4 @@
-package com.example.githubuserfinder.ui.settings.broadcastreceiver
+package com.example.githubuserfinder.ui.broadcastreceiver
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -12,11 +12,10 @@ import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.githubuserfinder.R
 import java.util.*
 
-class ReminderNotification(): BroadcastReceiver() {
+class ReminderNotification : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         showNotification(context, 100)
     }

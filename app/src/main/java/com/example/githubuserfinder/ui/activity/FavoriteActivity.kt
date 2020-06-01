@@ -1,17 +1,21 @@
-package com.example.githubuserfinder.ui.favorite
+package com.example.githubuserfinder.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.database.ContentObserver
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.os.PersistableBundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserfinder.R
+import com.example.githubuserfinder.backend.db.DatabaseContract.FavColums.Companion.CONTENT_URI
 import com.example.githubuserfinder.backend.db.FavHelper
 import com.example.githubuserfinder.backend.db.dbhelper.MappingHelper
 import com.example.githubuserfinder.backend.model.Item
-import com.example.githubuserfinder.ui.detail.UserDetailActivity
-import com.example.githubuserfinder.ui.favorite.adapter.FavoriteAdapter
+import com.example.githubuserfinder.ui.adapter.FavoriteAdapter
 import kotlinx.android.synthetic.main.activity_favorite.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,6 +25,8 @@ import kotlinx.coroutines.launch
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var adapter : FavoriteAdapter
     private lateinit var favHelper: FavHelper
+    private lateinit var uriWithID: Uri
+    private var item: Item? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +55,27 @@ class FavoriteActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+        // delete data
+        uriWithID = Uri.parse(CONTENT_URI.toString() + "/" + item?.id)
+        adapter.setOnDeleteClickCallback(object : FavoriteAdapter.OnDeleteClickCallback {
+            override fun onDeleteClicked(position: Int) {
+                uriWithID = Uri.parse("$CONTENT_URI/$position")
+                contentResolver.delete(uriWithID, null, null)
+            }
+
+        })
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        val myObserver = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                loadFav()
+            }
+        }
+
+        // register content resolver
+        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
 
         if (savedInstanceState == null){
             loadFav()
@@ -73,17 +100,19 @@ class FavoriteActivity : AppCompatActivity() {
     // method to load fav from db
     private fun loadFav(){  // asynchronous
         GlobalScope.launch(Dispatchers.Main) {
-            loading_fav.visibility = View.VISIBLE
-            val fav = async(Dispatchers.IO){
-                val cursor = favHelper.queryAll()
+            val defFav = async(Dispatchers.IO) {
+                val cursor = contentResolver.query(CONTENT_URI, null, null, null, null)
                  MappingHelper.mapCursorToArrayList(cursor)
             }
 
-            val favArray = fav.await()
+            val favArray = defFav.await()
             if (favArray.size > 0){
+                no_user_fav.visibility = View.GONE
                 adapter.listFavorite = favArray
+            } else {
+                adapter.listFavorite = ArrayList()
+                no_user_fav.visibility = View.VISIBLE
             }
-            loading_fav.visibility = View.GONE
         }
     }
 

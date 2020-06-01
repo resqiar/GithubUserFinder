@@ -1,13 +1,11 @@
-package com.example.githubuserfinder.ui.settings
+package com.example.githubuserfinder.ui.activity
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceFragmentCompat
 import com.example.githubuserfinder.R
-import com.example.githubuserfinder.ui.settings.broadcastreceiver.ReminderNotification
+import com.example.githubuserfinder.ui.broadcastreceiver.ReminderNotification
 import kotlinx.android.synthetic.main.settings_activity.*
 
 class SettingsActivity : AppCompatActivity() {
@@ -25,7 +23,8 @@ class SettingsActivity : AppCompatActivity() {
 
         /* create shared pref */
         sharedPref = getSharedPreferences("reminder", Context.MODE_PRIVATE)
-        reminderNotification = ReminderNotification()
+        reminderNotification =
+            ReminderNotification()
 
         reminderSwitch()
         setPref()

@@ -1,22 +1,21 @@
-package com.example.githubuserfinder.ui.detail
+package com.example.githubuserfinder.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserfinder.R
 import com.example.githubuserfinder.backend.model.Item
-import com.example.githubuserfinder.ui.detail.adapter.FollowersAdapter
-import com.example.githubuserfinder.ui.detail.adapter.FollowingAdapter
+import com.example.githubuserfinder.ui.activity.UserDetailActivity
+import com.example.githubuserfinder.ui.adapter.FollowersAdapter
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.fragment_followers.*
-import kotlinx.android.synthetic.main.fragment_following.*
 import org.json.JSONArray
 
 /**
@@ -28,8 +27,9 @@ class FollowersFragment : Fragment() {
 
     companion object{
 
-        fun newInstance(username: String?): FollowersFragment{
-            val fragment = FollowersFragment()
+        fun newInstance(username: String?): FollowersFragment {
+            val fragment =
+                FollowersFragment()
             val bundle = Bundle()
 
             // put data dari parameter

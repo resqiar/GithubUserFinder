@@ -1,4 +1,4 @@
-package com.example.githubuserfinder.ui.main.adapter
+package com.example.githubuserfinder.ui.adapter
 
 import android.util.Log
 import android.view.LayoutInflater

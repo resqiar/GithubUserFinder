@@ -1,25 +1,22 @@
-package com.example.githubuserfinder.ui.main
+package com.example.githubuserfinder.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserfinder.R
 import com.example.githubuserfinder.backend.model.Item
-import com.example.githubuserfinder.ui.detail.UserDetailActivity
-import com.example.githubuserfinder.ui.favorite.FavoriteActivity
-import com.example.githubuserfinder.ui.main.adapter.MainAdapter
+import com.example.githubuserfinder.ui.adapter.MainAdapter
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 

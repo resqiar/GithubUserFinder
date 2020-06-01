@@ -1,22 +1,24 @@
-package com.example.githubuserfinder.ui.detail
+package com.example.githubuserfinder.ui.activity
 
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.database.SQLException
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.githubuserfinder.R
 import com.example.githubuserfinder.backend.db.DatabaseContract
+import com.example.githubuserfinder.backend.db.DatabaseContract.FavColums.Companion.CONTENT_URI
 import com.example.githubuserfinder.backend.db.FavHelper
-import com.example.githubuserfinder.backend.model.Item
-import com.example.githubuserfinder.ui.detail.pageradapter.SectionPagerAdapter
-import com.example.githubuserfinder.ui.favorite.adapter.FavoriteAdapter
-import com.example.githubuserfinder.ui.settings.SettingsActivity
+import com.example.githubuserfinder.ui.adapter.FavoriteAdapter
+import com.example.githubuserfinder.ui.adapter.pageradapter.SectionPagerAdapter
+import com.example.githubuserfinder.ui.fragment.FollowersFragment
+import com.example.githubuserfinder.ui.fragment.FollowingFragment
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
@@ -33,7 +35,6 @@ class UserDetailActivity : AppCompatActivity(), View.OnClickListener {
 
         /* DATA FROM ACTIVITY */
         val username = intent.getStringExtra("username")
-        Log.e("NILAI USERNAME", username.toString())
 
         /*TAB SECTION*/
         val sectionPagerAdapter = SectionPagerAdapter(this, supportFragmentManager)
@@ -47,11 +48,13 @@ class UserDetailActivity : AppCompatActivity(), View.OnClickListener {
         showDetail()
 
         val bundle = Bundle()
-        val followerFragment = FollowersFragment()
+        val followerFragment =
+            FollowersFragment()
         bundle.putString("username", username)
         followerFragment.arguments = bundle
 
-        val followingFragment = FollowingFragment()
+        val followingFragment =
+            FollowingFragment()
         bundle.putString("username", username)
         followingFragment.arguments = bundle
 
@@ -67,11 +70,17 @@ class UserDetailActivity : AppCompatActivity(), View.OnClickListener {
         val username = intent.getStringExtra("username")
 
         // kirim nilai username ke following fragment
-        val followingFragment = FollowingFragment.newInstance(username)
+        val followingFragment =
+            FollowingFragment.newInstance(
+                username
+            )
         supportFragmentManager.beginTransaction().replace(R.id.view_pager, followingFragment).commit()
 
         // kirim nilai username ke following fragment
-        val followersFragment = FollowersFragment.newInstance(username)
+        val followersFragment =
+            FollowersFragment.newInstance(
+                username
+            )
         supportFragmentManager.beginTransaction().replace(R.id.view_pager, followersFragment).commit()
 
 
@@ -172,17 +181,22 @@ class UserDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if(v?.id == R.id.addToFav){
+            val userID = intent.getStringExtra("id")
             val userName = intent.getStringExtra("username")
             val userAvatar = intent.getStringExtra("avatar")
 
             val values = ContentValues()
+            values.put(DatabaseContract.FavColums._ID, userID)
             values.put(DatabaseContract.FavColums.USERNAME, userName)
             values.put(DatabaseContract.FavColums.AVATAR, userAvatar)
-            favHelper.insertData(values)
-            Log.e("INPUT DATA", values.toString())
 
+            try {
+                contentResolver.insert(CONTENT_URI, values)
+            } catch (e: SQLException) {
+                Toast.makeText(this, "Already in favorite!", Toast.LENGTH_SHORT).show()
+            }
             addToFav.setImageResource(R.drawable.ic_favorite_black_24dp)
-            Toast.makeText(this, "Favorite added", Toast.LENGTH_SHORT).show()
+
         }
     }
 }

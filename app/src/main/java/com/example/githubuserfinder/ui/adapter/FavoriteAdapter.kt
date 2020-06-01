@@ -1,10 +1,9 @@
-package com.example.githubuserfinder.ui.favorite.adapter
+package com.example.githubuserfinder.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -16,50 +15,15 @@ import kotlinx.android.synthetic.main.item_favorite.view.*
 class FavoriteAdapter(context: Context) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
     var listFavorite = ArrayList<Item>()
         set(listFavorite) {
-            if (listFavorite.size > 0) {
                 this.listFavorite.clear()
-            }else{
                 this.listFavorite.addAll(listFavorite)
-            }
             notifyDataSetChanged()
         }
-
-    /* DATABASE METHOD ( ADD UPDATE DELETE ) */
-//    fun addItem(model: Item) {
-//        this.listFavorite.add(model)
-//        notifyItemInserted(this.listFavorite.size - 1)
-//    }
-//    fun updateItem(position: Int, model: Item) {
-//        this.listFavorite[position] = model
-//        notifyItemChanged(position, model)
-//    }
-    fun removeItem(position: Int) {
-        this.listFavorite.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, this.listFavorite.size)
-    }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val tvName : TextView = itemView.tv_name_favorite
         val tvAvatar : ImageView = itemView.tv_img_favorite
-        val btnDelete : ImageButton = itemView.delete_fav
-//        fun bindUI(model: Item) {
-//            with(itemView){
-//                Log.e("ADAPTER FAV", model.toString())
-//                Glide.with(itemView.context)
-//                    .load(model.avatar_url)
-//                    .into(tv_img_favorite)
-//
-//                tv_name_favorite.text = model.login
-//                tv_desc_favorite.text = model.id.toString()
-//
-//                Log.e("CEK NILAI FAV", model.login.toString())
-//                itemView.setOnClickListener {
-//                    // buat onclick listener yang akan menuju detail Fragment
-//                    onItemClickCallback?.onItemClicked(model.login)
-//                }
-//            }
-//        }
+        val btnDelete: ImageView = itemView.delete_fav
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -79,7 +43,7 @@ class FavoriteAdapter(context: Context) : RecyclerView.Adapter<FavoriteAdapter.V
             .into(holder.tvAvatar)
 
         holder.btnDelete.setOnClickListener {
-            removeItem(listFavorite[position].id)
+            onDeleteClickCallback?.onDeleteClicked(listFavorite[position].id)
         }
         holder.itemView.setOnClickListener {
             onItemClickCallback?.onItemClicked(listFavorite[position].login, listFavorite[position].avatar_url)
@@ -96,6 +60,18 @@ class FavoriteAdapter(context: Context) : RecyclerView.Adapter<FavoriteAdapter.V
     // fungsi callback
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
+    }
+
+    // buat interface yang akkan membawa btn_delete ke favActivity
+    private var onDeleteClickCallback: OnDeleteClickCallback? = null
+
+    interface OnDeleteClickCallback {
+        fun onDeleteClicked(position: Int)
+    }
+
+    // fungsi callback
+    fun setOnDeleteClickCallback(onDeleteClickCallback: OnDeleteClickCallback) {
+        this.onDeleteClickCallback = onDeleteClickCallback
     }
 
 
