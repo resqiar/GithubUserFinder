@@ -44,4 +44,5 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="reminder_notification">How you doing?</string>
     <string name="reminder_notification_text">Wanna Discover Other Github User?  Lets Go!</string>
+    <string name="no_fav">You dont have favorite user yet!</string>
 </resources>

@@ -49,7 +49,7 @@ class FavHelper(context: Context) {
             null,
             null,
             null,
-            "$_ID ASC"
+            "$_ID DESC"
         )
     }
 

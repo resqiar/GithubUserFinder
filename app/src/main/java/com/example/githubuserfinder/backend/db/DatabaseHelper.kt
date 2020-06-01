@@ -14,8 +14,8 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         private const val DATABASE_NAME = "dbfavuser"
         private const val DATABASE_VERSION = 1
         private const val SQL_CREATE_TABLE = "CREATE TABLE $TABLE_NAME" +
-                "($_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "$USERNAME TEXT NOT NULL," +
+                "($_ID INTEGER PRIMARY KEY," +
+                "$USERNAME TEXT NOT NULL UNIQUE," +
                 "$AVATAR TEXT NOT NULL)"
     }
 

@@ -21,4 +21,17 @@ object MappingHelper {
         Log.e("favDATA MAPPING", favData.toString())
         return favData
     }
+
+    fun mapCursorToObject(favCursor: Cursor?): Item {
+        var fav = Item()
+        favCursor?.apply {
+            moveToFirst()
+            val id = getInt(getColumnIndexOrThrow(DatabaseContract.FavColums._ID))
+            val username = getString(getColumnIndexOrThrow(DatabaseContract.FavColums.USERNAME))
+            val avatar = getString(getColumnIndexOrThrow(DatabaseContract.FavColums.AVATAR))
+
+            fav = Item(id, username, avatar, 0, 0, 0)
+        }
+        return fav
+    }
 }
